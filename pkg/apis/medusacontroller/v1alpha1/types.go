@@ -35,11 +35,11 @@ type Medusa struct {
 
 // MedusaSpec is the spec for a Medusa resource
 type MedusaSpec struct {
-	Name        string
-	CurrrentSHA string `json:"current_sha"`
+	BranchName  string `json:"branchName"`
+	CurrrentSHA string `json:"currentSha"`
 	Pusher      string
-	RepoURL     string `json:"repo_url"`
-	RepoName    string `json:"repo_name"`
+	RepoURL     string `json:"repoUrl"`
+	RepoName    string `json:"repoName"`
 	Destroy     bool
 	//TODO - Must be an array of objects due to the nature of different
 	// possible templates. Deployments, Services, Ingress, etc.

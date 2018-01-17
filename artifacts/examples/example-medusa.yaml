@@ -1,0 +1,14 @@
+apiVersion: medusacontroller.k8s.io/v1alpha1
+kind: Medusa
+metadata:
+  name: example-medusa
+spec:
+  branchName: staging
+  currentSha: "sdkfjhalskdjfhlaskjdhf"
+  pusher: "danieloliveira079"
+  repoUrl: "git@github.com:danieloliveira079/medusa.git"
+  repoName: medusa
+  deploymentName: "medusa-dp"
+  destroy: false
+  replicas: 1
+  replicas: 1
