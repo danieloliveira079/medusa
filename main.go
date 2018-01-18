@@ -30,7 +30,7 @@ import (
 
 	clientset "github.com/danieloliveira079/medusa/pkg/client/clientset/versioned"
 	informers "github.com/danieloliveira079/medusa/pkg/client/informers/externalversions"
-	medusacontroller "github.com/danieloliveira079/medusa/pkg/medusacontroller"
+	medusacontroller "github.com/danieloliveira079/medusa/pkg/medusa"
 	"github.com/danieloliveira079/medusa/pkg/signals"
 )
 
