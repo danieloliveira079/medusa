@@ -1,5 +1,5 @@
 # Medusa
-Continuous Deployment Tool for Multi-Staging Environments
+GitOps Tool for Multi Environments Deployments
 
 # Running
 
