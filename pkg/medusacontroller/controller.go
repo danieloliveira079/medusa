@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package medusa
 
 import (
 	"fmt"
@@ -37,9 +37,9 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 
-	samplev1alpha1 "github.com/danieloliveira079/medusa/pkg/apis/medusacontroller/v1alpha1"
+	medusav1alpha1 "github.com/danieloliveira079/medusa/pkg/apis/medusacontroller/v1alpha1"
 	clientset "github.com/danieloliveira079/medusa/pkg/client/clientset/versioned"
-	samplescheme "github.com/danieloliveira079/medusa/pkg/client/clientset/versioned/scheme"
+	medusascheme "github.com/danieloliveira079/medusa/pkg/client/clientset/versioned/scheme"
 	informers "github.com/danieloliveira079/medusa/pkg/client/informers/externalversions"
 	listers "github.com/danieloliveira079/medusa/pkg/client/listers/medusacontroller/v1alpha1"
 )
@@ -84,7 +84,7 @@ type Controller struct {
 	recorder record.EventRecorder
 }
 
-// NewController returns a new sample controller
+// NewController returns a new medusa controller
 func NewController(
 	kubeclientset kubernetes.Interface,
 	medusaclientset clientset.Interface,
@@ -97,9 +97,9 @@ func NewController(
 	medusaInformer := medusaInformerFactory.Medusacontroller().V1alpha1().Medusas()
 
 	// Create event broadcaster
-	// Add sample-controller types to the default Kubernetes Scheme so Events can be
-	// logged for sample-controller types.
-	samplescheme.AddToScheme(scheme.Scheme)
+	// Add medusa types to the default Kubernetes Scheme so Events can be
+	// logged for medusa types.
+	medusascheme.AddToScheme(scheme.Scheme)
 	glog.V(4).Info("Creating event broadcaster")
 	eventBroadcaster := record.NewBroadcaster()
 	eventBroadcaster.StartLogging(glog.Infof)
@@ -321,7 +321,7 @@ func (c *Controller) syncHandler(key string) error {
 	return nil
 }
 
-func (c *Controller) updateMedusaStatus(medusa *samplev1alpha1.Medusa, deployment *appsv1beta2.Deployment) error {
+func (c *Controller) updateMedusaStatus(medusa *medusav1alpha1.Medusa, deployment *appsv1beta2.Deployment) error {
 	// NEVER modify objects from the store. It's a read-only, local cache.
 	// You can use DeepCopy() to make a deep copy of original object and modify this copy
 	// Or create a copy manually for better performance
@@ -391,7 +391,7 @@ func (c *Controller) handleObject(obj interface{}) {
 // newDeployment creates a new Deployment for a Medusa resource. It also sets
 // the appropriate OwnerReferences on the resource so handleObject can discover
 // the Medusa resource that 'owns' it.
-func newDeployment(medusa *samplev1alpha1.Medusa) *appsv1beta2.Deployment {
+func newDeployment(medusa *medusav1alpha1.Medusa) *appsv1beta2.Deployment {
 	labels := map[string]string{
 		"app":        "nginx",
 		"controller": medusa.Name,
@@ -402,8 +402,8 @@ func newDeployment(medusa *samplev1alpha1.Medusa) *appsv1beta2.Deployment {
 			Namespace: medusa.Namespace,
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(medusa, schema.GroupVersionKind{
-					Group:   samplev1alpha1.SchemeGroupVersion.Group,
-					Version: samplev1alpha1.SchemeGroupVersion.Version,
+					Group:   medusav1alpha1.SchemeGroupVersion.Group,
+					Version: medusav1alpha1.SchemeGroupVersion.Version,
 					Kind:    "Medusa",
 				}),
 			},

@@ -40,7 +40,7 @@ go_library(
         ],
         "//conditions:default": [],
     }),
-    importpath = "k8s.io/sample-controller/pkg/signals",
+    importpath = "github.com/danieloliveira079/medusa/pkg/signals",
     visibility = ["//visibility:public"],
 )
 

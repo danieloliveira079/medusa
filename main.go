@@ -18,6 +18,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"time"
 
 	"github.com/golang/glog"
@@ -29,6 +30,7 @@ import (
 
 	clientset "github.com/danieloliveira079/medusa/pkg/client/clientset/versioned"
 	informers "github.com/danieloliveira079/medusa/pkg/client/informers/externalversions"
+	medusacontroller "github.com/danieloliveira079/medusa/pkg/medusacontroller"
 	"github.com/danieloliveira079/medusa/pkg/signals"
 )
 
@@ -39,6 +41,8 @@ var (
 
 func main() {
 	flag.Parse()
+
+	fmt.Println("Starting medusa controller!")
 
 	// set up signals so we handle the first shutdown signal gracefully
 	stopCh := signals.SetupSignalHandler()
@@ -59,12 +63,12 @@ func main() {
 	}
 
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactory(kubeClient, time.Second*30)
-	exampleInformerFactory := informers.NewSharedInformerFactory(medusaClient, time.Second*30)
+	medusaInformerFactory := informers.NewSharedInformerFactory(medusaClient, time.Second*30)
 
-	controller := NewController(kubeClient, medusaClient, kubeInformerFactory, exampleInformerFactory)
+	controller := medusacontroller.NewController(kubeClient, medusaClient, kubeInformerFactory, medusaInformerFactory)
 
 	go kubeInformerFactory.Start(stopCh)
-	go exampleInformerFactory.Start(stopCh)
+	go medusaInformerFactory.Start(stopCh)
 
 	if err = controller.Run(2, stopCh); err != nil {
 		glog.Fatalf("Error running controller: %s", err.Error())
